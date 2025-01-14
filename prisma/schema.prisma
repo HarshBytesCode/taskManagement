@@ -7,13 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+enum PriorityType {
+  URGENT
+  HIGH
+  LOW
+  MEDIUM
 }
+
 
 model User {
   id       String    @id @default(cuid())
@@ -22,7 +22,8 @@ model User {
   password String
   image    String?
   Project  Project[]
-  sessions Session[]
+  assignedTasks Tasks[]
+  Collaborations Collaboration[]
 }
 
 model Project {
@@ -34,15 +35,29 @@ model Project {
   userId      String
   User        User     @relation(fields: [userId], references: [id])
   Tasks       Tasks[]
+  Collaborators Collaboration[]
+}
+
+model Collaboration {
+  id          String    @id @default(cuid())
+  userId      String
+  projectId   String
+  User        User     @relation(fields: [userId], references: [id])
+  Project     Project  @relation(fields: [projectId], references: [id])  
+
+  @@unique([userId, projectId])
 }
 
 model Tasks {
   id          String   @id @default(cuid())
   title       String
   description String
+  priority    PriorityType
   createdAt   DateTime @default(now())
   expiresAt   DateTime
   projectId   String
   userId      String
+  assignId    String?
   Project     Project  @relation(fields: [projectId], references: [id])
+  assignedTo  User?     @relation(fields: [userId], references: [id])
 }

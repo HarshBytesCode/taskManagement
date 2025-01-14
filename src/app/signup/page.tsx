@@ -77,7 +77,6 @@ function SignUp() {
           <input
             type="text"
             name="name"
-            id="name"
             value={formData.name}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"

@@ -1,11 +1,15 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { authenticationRouter } from "./routers/authentication";
 import { projectRouter } from "./routers/project";
+import { taskRouter } from "./routers/task";
+import { collaboraterRouter } from "./routers/collaborator";
 
 
 export const appRouter = createTRPCRouter({
   authentication: authenticationRouter,
-  project: projectRouter
+  project: projectRouter,
+  task: taskRouter,
+  collaborator: collaboraterRouter
 });
 
 // export type definition of API

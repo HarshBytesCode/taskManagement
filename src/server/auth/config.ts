@@ -63,7 +63,6 @@ export const authConfig = {
   adapter: PrismaAdapter(db),
   callbacks: {
     async session({ session, token }) {
-      console.log("Session", session, token);
       
       if (token) {
         session.user = {
@@ -74,8 +73,6 @@ export const authConfig = {
       return session;
     },
     async jwt({ token, user }) {
-
-      console.log("TOKEN", token, user);
       
       if (user) {
         token.id = user.id;

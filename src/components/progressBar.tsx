@@ -11,13 +11,13 @@ function ProgressBar({endDate, startDate}: ProgressBarType) {
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-    
+        console.log(endDate, startDate);
+        
         const now = new Date().getTime();
         const end = new Date(endDate).getTime();
         const start = new Date(startDate).getTime();
 
         const progressPercentage = Math.min(100, Math.max(0, ((now - start) / (end - start))*100 ));
-
         setProgress(progressPercentage);
 
 
@@ -27,7 +27,7 @@ function ProgressBar({endDate, startDate}: ProgressBarType) {
   return (
 
     <div
-    className=' w-full bg-black'>
+    className=' w-full bg-green-600'>
         <div
         style={{
             width: `${progress}%`

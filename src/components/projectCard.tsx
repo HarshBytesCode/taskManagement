@@ -3,45 +3,68 @@
 
 import React from 'react'
 import ProgressBar from './progressBar'
+import Link from 'next/link';
 
-function ProjectCard() {
+interface ProjectCardType {
+    title: string,
+    description: string | null,
+    createdAt: Date,
+    expiresAt: Date,
+    projectId: string,
+    leadBy: string
+}
 
-    const randomStartDate = new Date("2024-12-15"); // Create a Date object
-    const randomEndDate = new Date("2025-01-30");
+
+function ProjectCard({
+    title,
+    description,
+    createdAt,
+    expiresAt,
+    projectId,
+    leadBy
+}: ProjectCardType) {
+
+
     const formatDate = (date: Date) => {
         const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-based, so add 1
-        const day = date.getDate().toString().padStart(2, "0"); // Ensure day has 2 digits
-      
+        const month = (date.getMonth() + 1).toString().padStart(2, "0"); 
+        const day = date.getDate().toString().padStart(2, "0");
         return `${day}/${month}/${year}`;
-      };
+    };
   return (
-    <div
-    className='flex flex-col space-y-3 border p-3 rounded-xl bg-[#d9d9d9] text-[#284b63] '
+    <Link
+    href={`project?id=${projectId}`}
+    className='flex flex-col justify-between border p-3 rounded-xl bg-[#d9d9d9] text-[#284b63] '
     >
-        <div>
+        <div
+        className=' break-words w-full flex flex-col'
+        >
             <h1 
             className='text-2xl font-bold'
-            >Title</h1>
-            <p>Description</p>
-        </div>
-        <div
-        className='text-[#da4167]'
-        >
-            <div className='flex justify-between items-center'>
-                <div>Deadline</div>
-                <div>{formatDate(randomEndDate)}</div>
-            </div>
-            <ProgressBar
-            endDate={randomEndDate}
-            startDate={randomStartDate}
-            />
+            >{title}</h1>
+            <p
+            className=''
+            >{description}</p>
         </div>
         <div>
-            <div>Lead by - Harsh Gupta</div>
+            <div
+            className='text-[#da4167]'
+            >
+                <div className='flex justify-between items-center'>
+                    <div>Deadline</div>
+                    <div>{formatDate(expiresAt)}</div>
+                </div>
+                <ProgressBar
+                endDate={expiresAt}
+                startDate={createdAt}
+                />
+            </div>
+            <div>
+                <div>Lead by - {leadBy}</div>
+            </div>
         </div>
 
-    </div>
+    </Link>
   )
 }
 

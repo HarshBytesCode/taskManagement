@@ -1,13 +1,49 @@
+'use client'
 
-
-import { Cross } from 'lucide-react'
-import React from 'react'
+import { Cross, Loader2 } from 'lucide-react'
+import React, { useState } from 'react'
+import { api } from '~/trpc/react';
 
 function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: any}) {
 
-    function handleSubmit() {
+  const projectRouter = api.project.addproject.useMutation();
+  const [isLoading, setIsLoading] = useState(false);
 
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    createdAt: new Date().toISOString().slice(0, 10),
+    expiresAt: ''
+  });
+
+  function handleChange(e: any) {
+    const { name, value } = e.target;
+    console.log(name, value);
+    
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  }
+
+  async function handleSubmit(e: any) {
+
+    e.preventDefault();
+
+    try {
+      await projectRouter.mutateAsync(formData)
+      
+    } catch (error) {
+
+      alert("Error in creating project.")
+      
+    } finally {
+      setIsLoading(false);
+      setIsOpen(false);
     }
+    
+    
+  }
 
   return (
     <div
@@ -28,7 +64,10 @@ function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: any}) {
                 Project Name
               </label>
               <input
+                name='title'
                 type="text"
+                value={formData.title}
+                onChange={handleChange}
                 placeholder="Enter project name"
                 className="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -38,6 +77,9 @@ function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: any}) {
                 Description
               </label>
               <textarea
+                name='description'
+                value={formData.description}
+                onChange={handleChange}
                 placeholder="Enter project description"
                 className="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows={3}
@@ -48,7 +90,12 @@ function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: any}) {
                 Start Date
               </label>
               <input
+                name='createdAt'
                 type="date"
+                value={formData.createdAt}
+                onChange={handleChange}
+                placeholder='dd/mm/yyyy'
+                maxLength={10}
                 className="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -57,7 +104,12 @@ function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: any}) {
                 End Date
               </label>
               <input
+                name='expiresAt'
                 type="date"
+                value={formData.expiresAt}
+                onChange={handleChange}
+                placeholder='DD/MM/YYYY'
+                maxLength={10}
                 className="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -65,7 +117,7 @@ function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: any}) {
               type="submit"
               className="w-full bg-blue-500 text-white font-medium px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
             >
-              Create Project
+              { isLoading ? <Loader2 className=' animate-spin mx-auto'/> : "Create Project"}
             </button>
           </form>
 

@@ -13,6 +13,13 @@ export const projectRouter = createTRPCRouter({
         return await ctx.db.project.findMany({
             where: {
                 userId
+            },
+            include: {
+                User: {
+                    select: {
+                        name: true
+                    },
+                }
             }
         })
 
@@ -21,25 +28,34 @@ export const projectRouter = createTRPCRouter({
     .input(z.object({
         title: z.string(),
         description: z.string().optional(),
-        expiresAt: z.date()
+        expiresAt: z.string(),
     }))
     .mutation(async ({ ctx, input }) => {
 
         try {
-            console.log(ctx, "ctx");
+
+            const expiresAt = new Date(input.expiresAt)
             
-            await ctx.db.project.create({
+            const project = await ctx.db.project.create({
                 
                 data: {
                     title: input.title,
                     description: input.description,
-                    expiresAt: input.expiresAt,
+                    expiresAt: expiresAt,
                     userId: ctx.session.user.id
 
                 }
             })
 
+            await ctx.db.collaboration.create({
+                data: {
+                    userId: ctx.session.user.id,
+                    projectId: project.id
+                }
+            })
+
         } catch (error) {
+            console.error("Error in creating project.", error);
             
         }
     })

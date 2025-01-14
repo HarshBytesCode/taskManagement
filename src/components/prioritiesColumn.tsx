@@ -3,33 +3,35 @@
 import { useDrop } from 'react-dnd';
 import React from 'react';
 import PriorityCard from './priorityCard';
+import { api } from '~/trpc/react';
 
-enum Priority {
-    URGENT = "URGENT",
-    HIGH = "HIGH",
-    MEDIUM = "MEDIUM",
-    LOW = "LOW"
-}
 
 interface PriorityType {
-    priority: "URGENT" | "HIGH" | "MEDIUM" | "LOW"
+    priority: "URGENT" | "HIGH" | "MEDIUM" | "LOW",
+    tasks: {}[],
+    refetch: any
 }
 
-function PriorititesColumn({priority}: PriorityType) {
+function PriorititesColumn({priority, tasks, refetch}: PriorityType) {
+
+    const priorityRouter = api.task.updatepriority.useMutation()
 
     const [, drop] = useDrop(() => ({
         accept: 'TASK',
-        drop: () => {
+        drop: async (item: {taskId: string}) => {
+            try {
+                await priorityRouter.mutateAsync({
+                    taskId: item.taskId,
+                    priority
+                })
+                refetch()
+                
+            } catch (error) {
+                alert("Not able to update priority.")
+            }
 
         }
     }))
-
-    const initialTasks: {}[] = [
-        { id: '1', content: 'Task 1', priority: 'low' },
-        { id: '2', content: 'Task 2', priority: 'low' },
-        { id: '3', content: 'Task 3', priority: 'medium' },
-        { id: '4', content: 'Task 4', priority: 'high' },
-      ];
 
   return (
 
@@ -41,9 +43,11 @@ function PriorititesColumn({priority}: PriorityType) {
         </div>
         <div 
         ref={(element: HTMLDivElement | null): void => {drop(element)}}
-        className='flex flex-col p-3 border space-y-4'
+        className='flex flex-col p-3 border-r h-full space-y-4'
         >
-            <PriorityCard/>
+            {tasks.map((task, index) => (
+                <PriorityCard key={index} task={task} />
+            ))}
         </div>
 
     </div>

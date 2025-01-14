@@ -27,8 +27,15 @@ function ProjectsGrid() {
     className='grid grid-cols-4 gap-4' 
     >
       {projects.length > 0 ? (
-        projects.map((project) => (
-          <ProjectCard/>
+        projects.map((project, index) => (
+          <ProjectCard key={index}
+          title={project.title}
+          description={project.description}
+          expiresAt={project.expiresAt}
+          createdAt={project.createdAt}
+          projectId={project.id}
+          leadBy={project.User.name}
+          />
         ))
       ) : "Add your first project."}
 
