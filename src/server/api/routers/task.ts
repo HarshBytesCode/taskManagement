@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { string, z } from "zod";
+import { z } from "zod";
 
 
 
@@ -16,10 +16,19 @@ export const taskRouter = createTRPCRouter({
             return await ctx.db.tasks.findMany({
                 where: {
                     projectId: input.projectId
+                },
+                include: {
+                    assignedTo: {
+                        select: {
+                            name: true,
+                            email: true
+                        }
+                    }
                 }
             })
 
         } catch (error) {
+            console.error("Error in retriving tasks.", error);
             
         }
 
@@ -27,6 +36,7 @@ export const taskRouter = createTRPCRouter({
     ,
     addtask: protectedProcedure
     .input(z.object({
+        taskId: z.string(),
         title: z.string(),
         description: z.string(),
         expiresAt: z.string(),
@@ -37,7 +47,7 @@ export const taskRouter = createTRPCRouter({
             "MEDIUM",
             "LOW"
         ]),
-        assignId: z.string().optional()
+        assignId: z.string().nullable()
     }))
     .mutation( async( { ctx, input }) => {
 
@@ -45,8 +55,17 @@ export const taskRouter = createTRPCRouter({
 
             const expiresAt = new Date(input.expiresAt);
 
-            await ctx.db.tasks.create({
-                data: {
+            await ctx.db.tasks.upsert({
+                where: {
+                    id: input.taskId,
+                },
+                update: {
+                    title: input.title,
+                    description: input.description,
+                    projectId: input.projectId,
+                    priority: input.priority
+                },
+                create: {
                     title: input.title,
                     description: input.description,
                     expiresAt,
@@ -89,6 +108,29 @@ export const taskRouter = createTRPCRouter({
             
         } catch (error) {
             console.log("Error while updating priority.", error);
+            
+        }
+    }),
+    assign: protectedProcedure
+    .input(z.object({
+        userId: z.string(),
+        taskId: z.string()
+    }))
+    .mutation(async({ ctx, input }) => {
+
+        try {
+            
+            await ctx.db.tasks.update({
+                where: {
+                    id: input.taskId
+                },
+                data: {
+                    assignId: input.userId
+                }
+            })
+
+        } catch (error) {
+            console.error("Error in assigning task.", error);
             
         }
     })

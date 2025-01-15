@@ -2,6 +2,8 @@
 import { Loader2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import AddTask from '~/components/addTask';
 import Collaborators from '~/components/collaborators';
 import PrioritiesTable from '~/components/priorities';
@@ -33,21 +35,23 @@ function Project() {
   
   return (
     <>
-    <div className='flex'>
-      <div className='w-full'>
-        <div
-        className="m-4"
-        >
-          Tasks
-        </div>
+      <DndProvider backend={HTML5Backend}>
+        <div className='flex'>
+          <div className='flex flex-col space-y-5 m-4 w-full'>
+            <div
+            className="text-4xl"
+            >
+              Tasks
+            </div>
 
-        <AddTask refetch={refetch} />
-        <PrioritiesTable tasks={tasks} refetch={refetch} />
-      </div>
-      <div className='lg:min-w-[20%]'>
-        <Collaborators projectId={projectId} />
-      </div>
-    </div>
+            <AddTask refetch={refetch} />
+            <PrioritiesTable tasks={tasks} refetch={refetch} />
+          </div>
+          <div className='lg:min-w-[20%]'>
+            <Collaborators projectId={projectId} />
+          </div>
+        </div>
+      </DndProvider>
     </>
   )
 }

@@ -1,29 +1,31 @@
 'use client'
 
-import React from 'react'
-import PriorititesColumn from './prioritiesColumn'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import React from 'react';
+import PriorititesColumn from './prioritiesColumn';
+import { RefetchType, TaskType } from '~/types/types';
 
-function PrioritiesTable({tasks, refetch}: any) {
+interface PrioritiesTableType {
+  tasks: TaskType[],
+  refetch: RefetchType
+}
+
+
+function PrioritiesTable({tasks, refetch}: PrioritiesTableType) {
   
   return (
-
-    <DndProvider backend={HTML5Backend}>
       <div
       className='grid grid-cols-4 h-[90vh]'
       >
-          {tasks.length > 0 ? (
-            <>
-              <PriorititesColumn priority='URGENT' tasks={tasks.filter((task: any) => task.priority == "URGENT")} refetch={refetch} />
-              <PriorititesColumn priority='HIGH' tasks={tasks.filter((task: any) => task.priority == "HIGH")} refetch={refetch} />
-              <PriorititesColumn priority='MEDIUM' tasks={tasks.filter((task: any) => task.priority == "MEDIUM")} refetch={refetch} />
-              <PriorititesColumn priority='LOW' tasks={tasks.filter((task: any) => task.priority == "LOW")} refetch={refetch} />
-            </>
+        {tasks.length > 0 ? (
+          <>
+            <PriorititesColumn priority='URGENT' tasks={tasks.filter((task: TaskType) => task.priority == "URGENT")} refetch={refetch} />
+            <PriorititesColumn priority='HIGH' tasks={tasks.filter((task: TaskType) => task.priority == "HIGH")} refetch={refetch} />
+            <PriorititesColumn priority='MEDIUM' tasks={tasks.filter((task: TaskType) => task.priority == "MEDIUM")} refetch={refetch} />
+            <PriorititesColumn priority='LOW' tasks={tasks.filter((task: TaskType) => task.priority == "LOW")} refetch={refetch} />
+          </>
 
-          ) : "Add your first task."}
+        ) : "Add your first task."}
       </div>
-    </DndProvider>
   )
 }
 

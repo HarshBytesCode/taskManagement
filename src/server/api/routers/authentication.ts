@@ -5,7 +5,6 @@ import bcrypt from 'bcrypt';
 
 import {
     createTRPCRouter,
-    protectedProcedure,
     publicProcedure,
   } from "~/server/api/trpc";
 
@@ -50,6 +49,7 @@ export const authenticationRouter = createTRPCRouter({
             }
 
         } catch (error) {
+            console.error("Error during authentication.", error);
             
         }
         

@@ -2,8 +2,10 @@
 import { CirclePlus } from 'lucide-react';
 import React, { useState } from 'react'
 import TaskModel from './addTaskModel';
+import { RefetchType } from '~/types/types';
 
-function AddTask({refetch}: any) {
+
+function AddTask({refetch}: {refetch: RefetchType}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

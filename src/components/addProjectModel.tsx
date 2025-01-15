@@ -4,7 +4,7 @@ import { Cross, Loader2 } from 'lucide-react'
 import React, { useState } from 'react'
 import { api } from '~/trpc/react';
 
-function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: any}) {
+function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}) {
 
   const projectRouter = api.project.addproject.useMutation();
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +16,7 @@ function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: any}) {
     expiresAt: ''
   });
 
-  function handleChange(e: any) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
     console.log(name, value);
     
@@ -26,16 +26,17 @@ function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: any}) {
     }));
   }
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 
     e.preventDefault();
 
     try {
-      await projectRouter.mutateAsync(formData)
+      await projectRouter.mutateAsync(formData);
       
     } catch (error) {
-
-      alert("Error in creating project.")
+      alert("Error in creating project.");
+      console.log("Error in creating project.", error);
+      
       
     } finally {
       setIsLoading(false);

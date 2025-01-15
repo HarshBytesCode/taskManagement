@@ -19,7 +19,7 @@ function SignUp() {
 
   const [loading, setLoading] = useState(false)
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -27,7 +27,7 @@ function SignUp() {
     }));
   };
 
-  const handleSubmit = async(e: any) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
 
     e.preventDefault();
     try {

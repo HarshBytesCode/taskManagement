@@ -3,10 +3,12 @@
 import React from 'react';
 import AddCollaborator from './addCollaborator';
 import { api } from '~/trpc/react';
+import UserCollaboratorCard from './userCollaboratorCard';
+import { UserType } from '~/types/types';
 
 function Collaborators({projectId}: {projectId: string}) {
 
-    const {data = [], isLoading, error, refetch} = api.collaborator.getcollaborators.useQuery({
+    const {data = []} = api.collaborator.getcollaborators.useQuery({
         projectId
     });
 
@@ -24,16 +26,14 @@ function Collaborators({projectId}: {projectId: string}) {
         className='w-full border-t pt-2'
         >
             <div
+            className='mb-2'
+            >Drag & drop the card of user on task to assign.</div>
+            <div
             className='flex flex-col space-y-2'
             >
-                {data.length > 0 ? data.map((user: any, index) => (
-                    <div key={index} className='flex flex-col w-full border bg-slate-800 rounded-md p-2'>
-                        <div>{user.name}</div>
-                        <div
-                        className='text-sm'
-                        >{user.email}</div>
-                    </div>
-                )): "No collaborators."}
+                {data.length > 0 ? data.map((user: UserType, index) => (
+                    <UserCollaboratorCard user={user} key={index} />
+                )): "No collaborator's yet."}
             </div>
         </div>
 

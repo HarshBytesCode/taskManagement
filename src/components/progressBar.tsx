@@ -21,7 +21,7 @@ function ProgressBar({endDate, startDate}: ProgressBarType) {
         setProgress(progressPercentage);
 
 
-    }, [endDate])
+    }, [endDate, startDate])
     
 
   return (

@@ -29,13 +29,13 @@ export const authConfig = {
       },
       async authorize(credentials) {
         
-        if( !credentials || !credentials.email || !credentials.password) {
+        if( !credentials?.email || !credentials?.password) {
           return null;
         }
 
         const userExist = await db.user.findUnique({
           where: {
-            email: credentials.email
+            email: credentials.email as string
           }
         })
 
@@ -44,7 +44,7 @@ export const authConfig = {
         }
 
 
-        if(!bcrypt.compare(credentials.password, userExist.password)) {
+        if(!await bcrypt.compare(credentials.password as string, userExist.password)) {
           return null;
         }
 
@@ -67,7 +67,7 @@ export const authConfig = {
       if (token) {
         session.user = {
           ...session.user,
-          id: token.sub as string,
+          id: token!.sub as string,
         };
       }
       return session;

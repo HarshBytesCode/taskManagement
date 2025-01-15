@@ -4,6 +4,7 @@ import { Loader2, X } from 'lucide-react'
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react'
 import { api } from '~/trpc/react';
+import { RefetchType } from '~/types/types';
 
 interface TaskDataType {
     title: string,
@@ -12,9 +13,11 @@ interface TaskDataType {
     expiresAt: string,
     projectId: string,
     priority: "URGENT" | "HIGH" | "MEDIUM" | "LOW",
+    taskId: string,
+    assignId: string | null
 }
 
-function TaskModel({isOpen, setIsOpen, refetch}: {isOpen: boolean, setIsOpen: any, refetch: any}) {
+function TaskModel({isOpen, setIsOpen, refetch}: {isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, refetch: RefetchType}) {
 
     const taskRouter = api.task.addtask.useMutation();
     const [isLoading, setIsLoading] = useState(false);
@@ -22,22 +25,25 @@ function TaskModel({isOpen, setIsOpen, refetch}: {isOpen: boolean, setIsOpen: an
     const searchParams = useSearchParams();
     const projectId = searchParams.get("id");
 
-    if(!projectId) return (
-        <div>
-            Please try again.
-        </div>
-    )
-
+    
     const [formData, setFormData] = useState<TaskDataType>({
         title: '',
         description: '',
         createdAt: new Date().toISOString().slice(0, 10),
         expiresAt: '',
         priority: "URGENT",
-        projectId: projectId
+        projectId: projectId!,
+        taskId: "",
+        assignId: null
     });
-
-    function handleChange(e: any) {
+    
+    if(!projectId) return (
+        <div>
+            Please try again.
+        </div>
+    )
+    
+    function handleChange(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
         const { name, value } = e.target;
         console.log(name, value);
         
@@ -47,17 +53,18 @@ function TaskModel({isOpen, setIsOpen, refetch}: {isOpen: boolean, setIsOpen: an
         }));
     }
 
-    async function handleSubmit(e: any) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 
         e.preventDefault();
 
         try {
         await taskRouter.mutateAsync(formData);
-        refetch()
+        await refetch();
         
         } catch (error) {
 
-        alert("Error in creating project.")
+        alert("Error in creating project.");
+        console.log("Error in creating project.", error);
         
         } finally {
         setIsLoading(false);

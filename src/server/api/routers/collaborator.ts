@@ -54,7 +54,7 @@ export const collaboraterRouter = createTRPCRouter({
                 }
             })
 
-            return projectUsers?.Collaborators.map(collaborator => collaborator.User) || [];
+            return projectUsers?.Collaborators.map(collaborator => collaborator.User) ?? [];
 
         } catch (error) {
             console.error("Error fetching collaborators.", error);
@@ -68,6 +68,11 @@ export const collaboraterRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
 
         try {
+
+            if(input.email == "") {
+                return []
+            }
+
             return  await ctx.db.user.findMany({
                 where: {
                     email: {contains: input.email, mode: "insensitive"}
