@@ -1,7 +1,8 @@
 'use client'
+
 import { Loader2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import AddTask from '~/components/addTask';
@@ -9,12 +10,12 @@ import Collaborators from '~/components/collaborators';
 import PrioritiesTable from '~/components/priorities';
 import { api } from '~/trpc/react';
 
-
 function Project() {
-
+  
   const searchParams = useSearchParams();
   const projectId = searchParams.get("id");
 
+  
 
   if(!projectId) return (
     <div>
@@ -22,11 +23,9 @@ function Project() {
     </div>
   )
   
-  const {data: tasks = [], isLoading, error, refetch } = api.task.getTask.useQuery({
+  const {data: tasks = [], error, refetch } = api.task.getTask.useQuery({
     projectId
   })
-
-  if(isLoading) return <Loader2 className='animate-spin'/>
 
   if(error) return <div>
     Please try again later.
@@ -35,6 +34,7 @@ function Project() {
   
   return (
     <>
+    <Suspense fallback={<Loader2 className='animate-spin'/>}>
       <DndProvider backend={HTML5Backend}>
         <div className='flex'>
           <div className='flex flex-col space-y-5 m-4 w-full'>
@@ -52,6 +52,7 @@ function Project() {
           </div>
         </div>
       </DndProvider>
+    </Suspense>
     </>
   )
 }

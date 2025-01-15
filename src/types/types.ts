@@ -1,5 +1,6 @@
 import { QueryObserverResult } from "@tanstack/react-query";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type RefetchType = (options?: { throwOnError: boolean }) => Promise<QueryObserverResult<any, any>> 
 
 export interface UserType {

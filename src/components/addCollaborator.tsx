@@ -19,10 +19,11 @@ function AddCollaborator() {
             clearTimeout(debounce.current)
         }
 
-        debounce.current = setTimeout(async() => {
+        debounce.current = setTimeout(() => {
+
            refetch().catch(error => {
             console.log("Error while refetching.", error);
-            
+
            })
         }, 300);
 

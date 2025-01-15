@@ -64,12 +64,11 @@ export const authConfig = {
   callbacks: {
     async session({ session, token }) {
       
-      if (token) {
-        session.user = {
-          ...session.user,
-          id: token!.sub as string,
-        };
-      }
+      session.user = {
+        ...session.user,
+        id: token?.sub ?? '',
+      };
+      
       return session;
     },
     async jwt({ token, user }) {
