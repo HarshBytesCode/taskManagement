@@ -28,35 +28,37 @@ export const authConfig = {
         password: { label: "Password", type: "password"}
       },
       async authorize(credentials) {
-        
-        if( !credentials?.email || !credentials?.password) {
+        console.log("Credentials received:", credentials);
+      
+        if (!credentials?.email || !credentials?.password) {
+          console.log("Email or password missing");
           return null;
         }
-
+      
         const userExist = await db.user.findUnique({
           where: {
-            email: credentials.email as string
-          }
-        })
-
-        if(!userExist) {
+            email: credentials.email as string,
+          },
+        });
+      
+        if (!userExist) {
+          console.log("User not found:", credentials.email);
           return null;
         }
-
-
-        if(!await bcrypt.compare(credentials.password as string, userExist.password)) {
-          return null;
-        }
-
-        console.log(userExist, "exisited user");
+        console.log(userExist, credentials);
         
-
+      
+        if (credentials.password != userExist.password) {
+          console.log("Invalid password for user:", credentials.email);
+          return null;
+        }
+      
+        console.log("User authenticated successfully:", userExist);
         return {
           id: userExist.id,
           name: userExist.name,
-          email: userExist.email
-        }
-
+          email: userExist.email,
+        };
       }
     })
   ],
@@ -82,6 +84,7 @@ export const authConfig = {
   session: {
     strategy: "jwt",
   },
+  trustHost: true,
   secret: process.env.NEXTAUTH_SECRET
 
 } satisfies NextAuthConfig;

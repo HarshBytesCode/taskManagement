@@ -33,7 +33,7 @@ export const authenticationRouter = createTRPCRouter({
                 })
             }
 
-            const hashedPassword = await bcrypt.hash(input.password, 10);
+            const hashedPassword = input.password;
 
             const user = await ctx.db.user.create({
                 data: {
