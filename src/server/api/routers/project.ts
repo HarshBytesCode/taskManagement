@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createProjectSchema } from "~/types/zodSchemas";
 
 
 export const projectRouter = createTRPCRouter({
@@ -25,11 +26,7 @@ export const projectRouter = createTRPCRouter({
 
     }),
     addproject: protectedProcedure
-    .input(z.object({
-        title: z.string(),
-        description: z.string().optional(),
-        expiresAt: z.string(),
-    }))
+    .input(createProjectSchema)
     .mutation(async ({ ctx, input }) => {
 
         try {
@@ -56,6 +53,25 @@ export const projectRouter = createTRPCRouter({
 
         } catch (error) {
             console.error("Error in creating project.", error);
+            
+        }
+    }),
+    deleteproject: protectedProcedure
+    .input(z.object({
+        projectId: z.string()
+    }))
+    .mutation(async ({ ctx, input }) => {
+
+        try {
+            
+            await ctx.db.project.delete({
+                where: {
+                    id: input.projectId
+                }
+            })
+
+        } catch (error) {
+            console.error("Error in deleting project.", error);
             
         }
     })

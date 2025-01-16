@@ -54,7 +54,7 @@ function PriorititesColumn({priority, tasks, refetch}: PriorityType) {
         className='flex flex-col p-3 border-r h-full space-y-4'
         >
             {tasks.map((task, index) => (
-                <PriorityCard key={index} task={task} />
+                <PriorityCard key={index} task={task} refetch={refetch} />
             ))}
         </div>
 

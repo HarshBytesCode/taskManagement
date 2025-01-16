@@ -7,14 +7,11 @@ import {
     createTRPCRouter,
     publicProcedure,
   } from "~/server/api/trpc";
+import { signupSchema } from "~/types/zodSchemas";
 
 export const authenticationRouter = createTRPCRouter({
     signup: publicProcedure
-    .input(z.object({
-        email: z.string(),
-        password: z.string(),
-        name: z.string()
-    }))
+    .input(signupSchema)
     .mutation( async({ ctx, input }) => {
 
         try {

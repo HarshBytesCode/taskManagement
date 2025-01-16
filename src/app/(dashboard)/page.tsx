@@ -1,7 +1,7 @@
 import AddProject from "~/components/addProject";
 import ProjectsGrid from "~/components/projectsGrid";
 
-export default async function Dashboard() {  
+export default async function Dashboard() { 
 
   return (
     <>
@@ -11,9 +11,7 @@ export default async function Dashboard() {
         <h1 
         className=" text-4xl"
         >Your Projects</h1>
-        <AddProject/>
         <ProjectsGrid/>
-
       </div>
     </>
   );

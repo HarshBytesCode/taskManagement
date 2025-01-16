@@ -1,9 +1,12 @@
 
 
 
-import React from 'react'
+import React, { useState } from 'react'
 import ProgressBar from './progressBar'
 import Link from 'next/link';
+import { Loader2, Trash2 } from 'lucide-react';
+import { api } from '~/trpc/react';
+import { RefetchType } from '~/types/types';
 
 interface ProjectCardType {
     title: string,
@@ -11,7 +14,8 @@ interface ProjectCardType {
     createdAt: Date,
     expiresAt: Date,
     projectId: string,
-    leadBy: string
+    leadBy: string,
+    refetch: RefetchType
 }
 
 
@@ -21,9 +25,12 @@ function ProjectCard({
     createdAt,
     expiresAt,
     projectId,
-    leadBy
+    leadBy,
+    refetch
 }: ProjectCardType) {
 
+    const [isDeleting, setIsDeleting] = useState(false);
+    const deleteProjectRouter = api.project.deleteproject.useMutation()
 
     const formatDate = (date: Date) => {
         const year = date.getFullYear();
@@ -31,6 +38,7 @@ function ProjectCard({
         const day = date.getDate().toString().padStart(2, "0");
         return `${day}/${month}/${year}`;
     };
+
   return (
     <Link
     href={`project?id=${projectId}`}
@@ -39,9 +47,32 @@ function ProjectCard({
         <div
         className=' break-words w-full flex flex-col'
         >
-            <h1 
-            className='text-2xl font-bold'
-            >{title}</h1>
+            <div className='flex justify-between'>
+                <h1 
+                className='text-2xl font-bold'
+                >{title}</h1>
+                <button
+                onClick={async (e) => {
+                    
+                    e.preventDefault();
+                    try {
+                        setIsDeleting(true);
+                        await deleteProjectRouter.mutateAsync({
+                            projectId
+                        })
+                        refetch()
+                    } catch (error) {
+                        
+                    }finally {
+                        setIsDeleting(false)
+                    }
+                }}
+                >
+                    {isDeleting ? <Loader2 className='animate-spin'/> : 
+                        <Trash2 className='text-black hover:text-red-800'/>
+                    }
+                </button>
+            </div>
             <p
             className=''
             >{description}</p>

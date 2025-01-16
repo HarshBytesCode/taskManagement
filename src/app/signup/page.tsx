@@ -4,7 +4,9 @@ import { Loader2 } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { z } from 'zod';
 import { api } from '~/trpc/react';
+import { signupSchema } from '~/types/zodSchemas';
 
 function SignUp() { 
 
@@ -31,7 +33,7 @@ function SignUp() {
 
     e.preventDefault();
     try {
-
+      signupSchema.parse(formData);
       setLoading(true);
       const user = await signUpRouter.mutateAsync(formData);
       
@@ -50,6 +52,12 @@ function SignUp() {
       }
 
     } catch (error) {
+      if(error instanceof z.ZodError) {
+        error.errors.forEach((error) => {
+            alert(error.message)
+        })
+        return
+      }
       console.log("SignUp error", error);
       alert("Problem in signup.");
       

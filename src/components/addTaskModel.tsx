@@ -3,8 +3,10 @@
 import { Loader2, X } from 'lucide-react'
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react'
+import { z } from 'zod';
 import { api } from '~/trpc/react';
 import { RefetchType } from '~/types/types';
+import { createTaskSchema } from '~/types/zodSchemas';
 
 interface TaskDataType {
     title: string,
@@ -58,17 +60,24 @@ function TaskModel({isOpen, setIsOpen, refetch}: {isOpen: boolean, setIsOpen: Re
         e.preventDefault();
 
         try {
-        await taskRouter.mutateAsync(formData);
-        await refetch();
-        
-        } catch (error) {
+            createTaskSchema.parse(formData);
 
-        alert("Error in creating project.");
-        console.log("Error in creating project.", error);
+            await taskRouter.mutateAsync(formData);
+            await refetch();
+            setIsOpen(false);
+            
+        } catch (error) {
+            if(error instanceof z.ZodError) {
+                error.errors.forEach((error) => {
+                    alert(error.message)
+                })
+                return
+            }
+            alert("Error in creating project.");
+            console.log("Error in creating project.", error);
         
         } finally {
-        setIsLoading(false);
-        setIsOpen(false);
+            setIsLoading(false);
         }
         
         

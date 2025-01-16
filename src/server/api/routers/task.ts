@@ -1,3 +1,4 @@
+import { createTaskSchema } from "~/types/zodSchemas";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
@@ -35,20 +36,7 @@ export const taskRouter = createTRPCRouter({
     })
     ,
     addtask: protectedProcedure
-    .input(z.object({
-        taskId: z.string(),
-        title: z.string(),
-        description: z.string(),
-        expiresAt: z.string(),
-        projectId: z.string(),
-        priority: z.enum([
-            "URGENT",
-            "HIGH",
-            "MEDIUM",
-            "LOW"
-        ]),
-        assignId: z.string().nullable()
-    }))
+    .input(createTaskSchema)
     .mutation( async( { ctx, input }) => {
 
         try {
@@ -131,6 +119,25 @@ export const taskRouter = createTRPCRouter({
 
         } catch (error) {
             console.error("Error in assigning task.", error);
+            
+        }
+    }),
+    deleteTask: protectedProcedure
+    .input(z.object({
+        taskId: z.string()
+    }))
+    .mutation(async ({ ctx, input }) => {
+
+        try {
+            
+            await ctx.db.tasks.delete({
+                where: {
+                    id: input.taskId
+                }
+            })
+
+        } catch (error) {
+            console.error("Error while deleting task.", error);
             
         }
     })

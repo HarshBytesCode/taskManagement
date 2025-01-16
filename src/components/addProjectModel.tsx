@@ -1,10 +1,19 @@
 'use client'
 
-import { Cross, Loader2 } from 'lucide-react'
+import { Loader2, X } from 'lucide-react'
 import React, { useState } from 'react'
+import { z } from 'zod';
 import { api } from '~/trpc/react';
+import { RefetchType } from '~/types/types';
+import { createProjectSchema } from '~/types/zodSchemas';
 
-function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}) {
+interface ProjectModelType {
+  isOpen: boolean, 
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  refetch: RefetchType
+}
+
+function ProjectModel({isOpen, setIsOpen, refetch}: ProjectModelType) {
 
   const projectRouter = api.project.addproject.useMutation();
   const [isLoading, setIsLoading] = useState(false);
@@ -31,16 +40,28 @@ function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.Di
     e.preventDefault();
 
     try {
+
+      createProjectSchema.parse(formData);
+
       await projectRouter.mutateAsync(formData);
-      
+      refetch()
+      setIsOpen(false);
+
     } catch (error) {
+
+      if(error instanceof z.ZodError) {
+        error.errors.forEach((error) => {
+          alert(error.message)
+        })
+        return
+      }
+
       alert("Error in creating project.");
       console.log("Error in creating project.", error);
       
       
     } finally {
       setIsLoading(false);
-      setIsOpen(false);
     }
     
     
@@ -53,8 +74,9 @@ function ProjectModel({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.Di
         <div
         className=' w-11/12 md:w-1/3'
         >
-            <Cross
-            className='absolute right-4 top-4'
+            <X
+            size={50}
+            className='absolute right-4 top-4 p-2 bg-white rounded-full hover:bg-slate-100 hover:cursor-pointer'
             onClick={() => {
                 setIsOpen(false)
             }}

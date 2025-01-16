@@ -34,7 +34,7 @@ model Project {
   createdAt   DateTime @default(now())
   expiresAt   DateTime
   userId      String
-  User        User     @relation(fields: [userId], references: [id])
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   Tasks       Tasks[]
   Collaborators Collaboration[]
 }
@@ -43,8 +43,8 @@ model Collaboration {
   id          String    @id @default(cuid())
   userId      String
   projectId   String
-  User        User     @relation(fields: [userId], references: [id])
-  Project     Project  @relation(fields: [projectId], references: [id])  
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)  
 
   @@unique([userId, projectId])
 }
@@ -59,6 +59,6 @@ model Tasks {
   projectId   String
   userId      String
   assignId    String?
-  Project     Project  @relation(fields: [projectId], references: [id])
-  assignedTo  User?     @relation(fields: [assignId], references: [id])
+  Project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignedTo  User?     @relation(fields: [assignId], references: [id], onDelete: Cascade)
 }

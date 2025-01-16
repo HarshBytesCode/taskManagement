@@ -13,6 +13,7 @@ interface PrioritiesTableType {
 function PrioritiesTable({tasks, refetch}: PrioritiesTableType) {
   
   return (
+    <>
       <div
       className='grid grid-cols-4 h-[90vh]'
       >
@@ -26,6 +27,7 @@ function PrioritiesTable({tasks, refetch}: PrioritiesTableType) {
 
         ) : "Add your first task."}
       </div>
+    </>
   )
 }
 

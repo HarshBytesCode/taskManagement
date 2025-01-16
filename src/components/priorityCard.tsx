@@ -3,19 +3,22 @@ import React, { useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import ProgressBar from './progressBar';
 import { api } from '~/trpc/react';
-import { Loader2 } from 'lucide-react';
-import { TaskType } from '~/types/types';
+import { Loader2, Trash2 } from 'lucide-react';
+import { RefetchType, TaskType } from '~/types/types';
 
 
 interface PriorityCardType {
-  task: TaskType
+  task: TaskType,
+  refetch: RefetchType
 }
 
-function PriorityCard({task}: PriorityCardType) {
+function PriorityCard({task, refetch}: PriorityCardType) {
 
+  const deleteTaskRouter = api.task.deleteTask.useMutation();
   const assignRouter = api.task.assign.useMutation();
   const [assignLoading, setAssignLoading] = useState(false);
   const [assignedTo, setAssignedTo] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false)
   
   const [, drag ] = useDrag(() => ({
       type: 'TASK',
@@ -60,14 +63,37 @@ function PriorityCard({task}: PriorityCardType) {
   return (
     <div
     ref={dragDropRef}
-    className='flex flex-col justify-between border p-3 rounded-xl bg-[#d9d9d9] text-[#284b63]'
+    className='flex flex-col justify-between border p-3 rounded-xl bg-[#d9d9d9] text-[#284b63] cursor-pointer'
     >
       <div
       className=' break-words w-full flex flex-col'
       >
-        <h1 
-        className='text-2xl font-bold'
-        >{task.title}</h1>
+        <div className='flex justify-between'>
+          <h1 
+          className='text-2xl font-bold'
+          >{task.title}</h1>
+          <button
+          onClick={async (e) => {
+              
+            e.preventDefault();
+            try {
+              setIsDeleting(true);
+              await deleteTaskRouter.mutateAsync({
+                  taskId: task.id
+              })
+              refetch()
+            } catch (error) {
+                
+            }finally {
+              setIsDeleting(false)
+            }
+          }}
+          >
+            {isDeleting ? <Loader2 className='animate-spin'/> : 
+              <Trash2 className='text-black hover:text-red-800'/>
+            }
+          </button>
+        </div>
         <p
         className=''
         >{task.description}</p>
