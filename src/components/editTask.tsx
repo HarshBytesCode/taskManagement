@@ -45,27 +45,33 @@ function EditTask({ task, isOpen, setIsOpen } : EditTaskType) {
     } catch (error) {
       alert("Error in updating.")
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
+      setIsOpen(false)
     }
 
   }
 
   return (
-    <div className={` ${isOpen ? "flex": "hidden" } fixed top-0 left-0 w-full h-full flex-col items-center justify-center backdrop-blur-md text-black`}>
-      <X
-      size={40}
-      className='absolute right-4 top-4 bg-white rounded-full hover:cursor-pointer'
-      onClick={() => {
-        setIsOpen(false);
-      }}
-      />
+    <div className={` ${isOpen ? "flex left-0": "hidden" } fixed z-50 top-0 -left-100 w-full h-full flex-col items-center justify-center backdrop-blur-md text-black cursor-default`}
+    onClick={(e) => {
+      e.stopPropagation()
+    }}
+    >
+      <button>
+        <X
+          size={40}
+          className="fixed top-4 right-4 z-50 bg-white rounded-full hover:cursor-pointer p-2 hover:bg-gray-100 transition-colors"
+          onClick={() => setIsOpen(false)}
+          aria-label="Close"
+        />
+      </button>
         <form
         onSubmit={handleSubmit}
         className='flex flex-col space-y-4 w-[30%]'
         >
           <div className='flex flex-col'>
             <label htmlFor="title"
-            className='text-xl'
+            className='text-xl font-semibold'
             >Title</label>
             <input
             name='title'
@@ -73,19 +79,20 @@ function EditTask({ task, isOpen, setIsOpen } : EditTaskType) {
             value={formData.title}
             onChange={handleChange}
             type="text" 
-            className='p-2'
+            className='p-3 bg-black text-white rounded-md'
             />
           </div>
           <div className='flex flex-col'>
             <label htmlFor="description"
-            className='text-xl'
+            className='text-xl font-semibold my-1'
             >Description</label>
             <textarea
             name='description' 
             id='description'
             value={formData.description}
             onChange={handleChange}
-            className='p-2'
+            className='p-3 bg-black text-white rounded-md'
+            rows={15}
             />
           </div>
           <button type='submit'

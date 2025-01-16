@@ -5,6 +5,7 @@ import ProgressBar from './progressBar';
 import { api } from '~/trpc/react';
 import { Loader2, Trash2 } from 'lucide-react';
 import { RefetchType, TaskType } from '~/types/types';
+import EditTask from './editTask';
 
 
 interface PriorityCardType {
@@ -18,7 +19,8 @@ function PriorityCard({task, refetch}: PriorityCardType) {
   const assignRouter = api.task.assign.useMutation();
   const [assignLoading, setAssignLoading] = useState(false);
   const [assignedTo, setAssignedTo] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   
   const [, drag ] = useDrag(() => ({
       type: 'TASK',
@@ -64,7 +66,11 @@ function PriorityCard({task, refetch}: PriorityCardType) {
     <div
     ref={dragDropRef}
     className='flex flex-col justify-between border p-3 rounded-xl bg-[#d9d9d9] text-[#284b63] cursor-pointer'
+    onClick={() => {
+      setIsEditing(true)
+    }}
     >
+      <EditTask isOpen={isEditing} setIsOpen={setIsEditing} task={task} />
       <div
       className=' break-words w-full flex flex-col'
       >

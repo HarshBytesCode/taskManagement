@@ -121,7 +121,7 @@ function TaskModel({isOpen, setIsOpen, refetch}: {isOpen: boolean, setIsOpen: Re
                     onChange={handleChange}
                     placeholder="Enter task description"
                     className="w-full border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows={3}
+                    rows={15}
                 ></textarea>
                 </div>
                 <div>

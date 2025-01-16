@@ -43,7 +43,6 @@ function Project() {
             >
               Tasks
             </div>
-
             <AddTask refetch={refetch} />
             <PrioritiesTable tasks={tasks} refetch={refetch} />
           </div>
