@@ -12,7 +12,7 @@ function Navbar() {
     >
         <ul className='flex space-x-3 '>
             <Link href={"/"} className='bg-gray-700 p-1 px-2 rounded-lg hover:bg-gray-800'>Dashboard</Link>
-            <Link href={"/"} className='bg-gray-700 p-1 px-2 rounded-lg hover:bg-gray-800'>Profile</Link>
+            <Link href={"/profile"} className='bg-gray-700 p-1 px-2 rounded-lg hover:bg-gray-800'>Profile</Link>
         </ul>
     </div>
   )

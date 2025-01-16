@@ -31,3 +31,9 @@ export const createTaskSchema = z.object({
     assignId: z.string().nullable()
 });
 
+
+export const updateProfile = z.object({
+    name: z.string().nonempty({message: "Name is required."}),
+    email: z.string().nonempty({message: "Email is required."})
+})
+

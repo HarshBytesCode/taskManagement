@@ -3,13 +3,15 @@ import { authenticationRouter } from "./routers/authentication";
 import { projectRouter } from "./routers/project";
 import { taskRouter } from "./routers/task";
 import { collaboraterRouter } from "./routers/collaborator";
+import { profileRouter } from "./routers/profile";
 
 
 export const appRouter = createTRPCRouter({
   authentication: authenticationRouter,
   project: projectRouter,
   task: taskRouter,
-  collaborator: collaboraterRouter
+  collaborator: collaboraterRouter,
+  profile: profileRouter
 });
 
 // export type definition of API
