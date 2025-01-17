@@ -135,6 +135,13 @@ function SignUp() {
           className=' animate-spin mx-auto'
           /> : "Sign Up" }
         </button>
+        <button
+        type='button'
+        onClick={() => signIn(undefined, {
+          callbackUrl: "/"
+        })}
+        className='w-full bg-[#219ebc] py-2 px-4 rounded-lg hover:bg-[#4d8fad] focus:ring-4 focus:ring-blue-300 mt-2'
+        >Already have an account!</button>
       </form>
     </div>
   );

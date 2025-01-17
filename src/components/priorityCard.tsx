@@ -87,8 +87,9 @@ function PriorityCard({task, refetch}: PriorityCardType) {
               await deleteTaskRouter.mutateAsync({
                   taskId: task.id
               })
-              refetch()
+              await refetch()
             } catch (error) {
+                console.log("Error while deleting task.");
                 
             }finally {
               setIsDeleting(false)

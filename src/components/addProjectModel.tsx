@@ -44,7 +44,7 @@ function ProjectModel({isOpen, setIsOpen, refetch}: ProjectModelType) {
       createProjectSchema.parse(formData);
 
       await projectRouter.mutateAsync(formData);
-      refetch()
+      await refetch()
       setIsOpen(false);
 
     } catch (error) {

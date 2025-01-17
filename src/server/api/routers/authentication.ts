@@ -47,6 +47,10 @@ export const authenticationRouter = createTRPCRouter({
 
         } catch (error) {
             console.error("Error during authentication.", error);
+            throw new TRPCError({
+                code: "BAD_REQUEST",
+                message: "Error in authentication."
+            })
             
         }
         

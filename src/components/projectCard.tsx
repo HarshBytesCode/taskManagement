@@ -60,7 +60,7 @@ function ProjectCard({
                         await deleteProjectRouter.mutateAsync({
                             projectId
                         })
-                        refetch()
+                        await refetch()
                     } catch (error) {
                         
                     }finally {
