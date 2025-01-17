@@ -1,29 +1,100 @@
-# Create T3 App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+# ProjectManagementApp
 
-## What's next? How do I make an app with this?
+A simple task management and collaboration tool built with the T3 stack, featuring task creation, assignment, tracking, user profiles, project settings, and integration with Supabase for database management. This app is deployed serverless on AWS using SST (Serverless Stack) to handle backend operations.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Tech Stack
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- **Frontend**: Next.js, TypeScript, Tailwind CSS
+- **Backend**: Serverless AWS using SST
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: NextAuth.js
+- **API**: tRPC
+- **ORM**: Prisma
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
 
-## Learn More
+## Setup Instructions
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Installation
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+1. Clone the repository:
 
-## How do I deploy this?
+   ```bash
+   git clone https://github.com/HarshBytesCode/ProjectManagementApp.git
+   cd ProjectManagementApp
+   ```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env.local` file in the root directory with the following variables:
+
+   ```env
+   NEXTAUTH_SECRET=your-nextauth-secret
+   NEXTAUTH_URL=http://localhost:3000
+   DATABASE_URL=your-database-connection-string
+   SUPABASE_URL=your-supabase-url
+   SUPABASE_ANON_KEY=your-supabase-anon-key
+   ```
+
+4. Set up **Supabase**:
+   - Create a project on [Supabase](https://supabase.com/).
+   - Generate the `SUPABASE_URL` from your Supabase dashboard.
+   - Design the schema for tasks, projects, and users in Supabase.
+
+5. Set up **AWS** for deployment:
+   - Install the **AWS CLI** and configure your credentials (`aws configure`).
+   - Install **SST** (Serverless Stack) if you haven't already:
+
+     ```bash
+     npm install -g sst
+     ```
+
+### Running the Application Locally
+
+1. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+2. Open the application in your browser:
+
+   ```bash
+   http://localhost:3000
+   ```
+
+### Deploying the Application
+
+1. Deploy the serverless backend with **SST**:
+
+   Run the following command to deploy your SST application:
+
+   ```bash
+   sst deploy
+   ```
+
+   SST will provision the necessary AWS resources, including Lambda functions, API Gateway, and other infrastructure.
+
+2. After deployment, you can visit the provided AWS endpoint to interact with the app in a production environment.
+
+### Unit Tests
+
+
+```bash
+npm test
+```
+
+## Deployment
+
+Once you’ve configured and tested the application locally, deploy it using **SST** to the AWS serverless environment. The backend is configured to handle all API requests and data management through AWS Lambda functions and Supabase as the database.
+
+## Architecture
+
+1. **Frontend**: The Next.js application handles the task management UI, user profile, and project settings. It communicates with the backend via tRPC.
+2. **Backend**: The serverless AWS functions are deployed using SST and AWS Lambda. API requests (task and project operations) are handled here.
+3. **Database**: Supabase manages the data layer, storing user and task information, and integrating seamlessly with Prisma for ORM operations.
