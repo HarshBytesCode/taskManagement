@@ -35,10 +35,8 @@ A simple task management and collaboration tool built with the T3 stack, featuri
 
    ```env
    NEXTAUTH_SECRET=your-nextauth-secret
-   NEXTAUTH_URL=http://localhost:3000
+   NEXTAUTH_URL=your-nextauth-url
    DATABASE_URL=your-database-connection-string
-   SUPABASE_URL=your-supabase-url
-   SUPABASE_ANON_KEY=your-supabase-anon-key
    ```
 
 4. Set up **Supabase**:
@@ -81,13 +79,6 @@ A simple task management and collaboration tool built with the T3 stack, featuri
    SST will provision the necessary AWS resources, including Lambda functions, API Gateway, and other infrastructure.
 
 2. After deployment, you can visit the provided AWS endpoint to interact with the app in a production environment.
-
-### Unit Tests
-
-
-```bash
-npm test
-```
 
 ## Deployment
 
