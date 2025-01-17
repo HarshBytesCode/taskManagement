@@ -67,9 +67,9 @@ function Profile() {
 
   return (
 
-    <div className='flex w-screen h-screen items-center justify-center'>
+    <div className='flex w-screen h-screen items-center justify-center p-2'>
       <form
-      className='flex flex-col space-y-5 w-1/3'
+      className='flex flex-col space-y-5 w-full lg:w-1/3'
       onSubmit={handleSubmit}
       >
         <div className='flex'>

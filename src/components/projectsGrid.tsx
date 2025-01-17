@@ -27,7 +27,7 @@ function ProjectsGrid() {
     <>
     <AddProject refetch={refetch} />
       <div
-      className='grid grid-cols-4 gap-4' 
+      className='grid grid-rows-none lg:grid-cols-4 gap-4' 
       >
         {projects.length > 0 ? (
           projects.map((project, index) => (

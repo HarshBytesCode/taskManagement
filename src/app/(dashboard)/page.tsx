@@ -1,4 +1,3 @@
-import AddProject from "~/components/addProject";
 import ProjectsGrid from "~/components/projectsGrid";
 
 export default async function Dashboard() { 

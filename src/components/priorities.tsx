@@ -15,7 +15,7 @@ function PrioritiesTable({tasks, refetch}: PrioritiesTableType) {
   return (
     <>
       <div
-      className='grid grid-cols-4 h-[90vh]'
+      className='grid grid-rows-4 lg:grid-cols-4 h-[90vh]'
       >
         {tasks.length > 0 ? (
           <>

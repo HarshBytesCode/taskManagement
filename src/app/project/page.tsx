@@ -36,8 +36,8 @@ function Project() {
     <>
     <Suspense fallback={<Loader2 className='animate-spin'/>}>
       <DndProvider backend={HTML5Backend}>
-        <div className='flex'>
-          <div className='flex flex-col space-y-5 m-4 w-full'>
+        <div className='flex flex-col lg:flex-row'>
+          <div className='flex flex-col space-y-5 m-4 w-full mt-24 lg:mt-2'>
             <div
             className="text-4xl"
             >
